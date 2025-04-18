@@ -1,13 +1,12 @@
 const express = require("express");
-const { protect } = require("../middleware/authMiddleware");
 const {
   getVendorProducts,
   getVendorProduct,
   createVendorProduct,
   updateVendorProduct,
   deleteVendorProduct,
-} = require("../controllers/vendorProductController"); // ✅ Correct import path
-
+} = require("../controllers/vendorProductController");
+const { vendorAuth } = require("../middleware/authMiddleware");
 const multer = require("multer");
 const path = require("path");
 
@@ -24,11 +23,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Routes
-router.get("/", protect, getVendorProducts);
-router.get("/:id", protect, getVendorProduct);
-router.post("/", protect, upload.single("image"), createVendorProduct); // ✅
-router.put("/:id", protect, updateVendorProduct);
-router.delete("/:id", protect, deleteVendorProduct);
+// Vendor protected routes
+router.get("/", vendorAuth, getVendorProducts);
+router.get("/:id", vendorAuth, getVendorProduct);
+router.post("/", vendorAuth, upload.single("image"), createVendorProduct);
+router.put("/:id", vendorAuth, upload.single("image"), updateVendorProduct);
+router.delete("/:id", vendorAuth, deleteVendorProduct);
 
 module.exports = router;

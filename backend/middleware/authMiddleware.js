@@ -1,7 +1,8 @@
 const Vendor = require("../models/Vendor");
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
+// User Authentication
 const protect = async (req, res, next) => {
   let token;
 
@@ -12,9 +13,16 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
       req.user = await User.findById(decoded.id).select("-password");
+
+      if (!req.user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
       next();
     } catch (error) {
+      console.error(error);
       res.status(401).json({ message: "Not authorized, token failed" });
     }
   } else {
@@ -22,6 +30,7 @@ const protect = async (req, res, next) => {
   }
 };
 
+// Admin Check
 const admin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next();
@@ -30,6 +39,7 @@ const admin = (req, res, next) => {
   }
 };
 
+// Vendor Authentication
 const vendorAuth = async (req, res, next) => {
   let token;
 
@@ -39,22 +49,21 @@ const vendorAuth = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const vendor = await Vendor.findById(decoded.id).select("-password");
+
       if (!vendor) {
         return res.status(401).json({ message: "Vendor not found" });
       }
 
-      // Check if vendor is approved
       if (!vendor.approved) {
         return res
           .status(403)
           .json({ message: "Vendor account not approved yet" });
       }
 
-      req.vendor = vendor;
+      req.vendor = vendor; // ✅ Important to set req.vendor
       next();
     } catch (error) {
       console.error(error);
@@ -64,7 +73,5 @@ const vendorAuth = async (req, res, next) => {
     return res.status(401).json({ message: "Not authorized, no token" });
   }
 };
-
-
 
 module.exports = { protect, admin, vendorAuth };

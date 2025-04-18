@@ -41,24 +41,20 @@ exports.getVendorProduct = asyncHandler(async (req, res, next) => {
 // @route   POST /api/vendor-products
 // @access  Private
 exports.createVendorProduct = asyncHandler(async (req, res, next) => {
-  // Add vendor to body
-  // console.log(req.body)
   req.body.vendor = req.vendor.id;
 
-  // Save first uploaded image
-  if (req.files && req.files.length > 0) {
-    req.body.image = `/uploads/${req.files[0].filename}`;
+  // Save uploaded image
+  if (req.file) {
+    req.body.image = `/uploads/${req.file.filename}`;
   }
 
-  // Generate numericId dynamically
   const latestProduct = await Product.findOne().sort({ numericId: -1 }).lean();
   const nextNumericId = latestProduct ? latestProduct.numericId + 1 : 1;
   req.body.numericId = nextNumericId;
 
-  // Create product
   const product = await Product.create(req.body);
 
-  // Optional: Update Vendor document (if needed)
+  // Optional: Add product to Vendor's products array
   await Vendor.findByIdAndUpdate(req.vendor.id, {
     $push: { products: product._id },
   });
@@ -89,8 +85,8 @@ exports.updateVendorProduct = asyncHandler(async (req, res, next) => {
   }
 
   // Handle image update if needed
-  if (req.files && req.files.length > 0) {
-    req.body.image = `/uploads/${req.files[0].filename}`;
+  if (req.file) {
+    req.body.image = `/uploads/${req.file.filename}`;
   }
 
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {

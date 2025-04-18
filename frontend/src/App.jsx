@@ -291,14 +291,10 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        { !localStorage.getItem("vendorInfo")   &&
-          <Navbar />
-        }<AnimatedRoutes />
+        <Navbar />
+        <AnimatedRoutes />
         <Footer />
-
-
       </Router>
-
     </AuthProvider>
   );
 }

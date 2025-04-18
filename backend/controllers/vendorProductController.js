@@ -43,11 +43,12 @@ exports.getVendorProduct = asyncHandler(async (req, res, next) => {
 exports.createVendorProduct = asyncHandler(async (req, res, next) => {
   req.body.vendor = req.vendor.id;
 
-  // Save uploaded image
-  if (req.file) {
-    req.body.image = `/uploads/${req.file.filename}`;
+  // Save Cloudinary URL
+  if (req.file && req.file.path) {
+    req.body.image = req.file.path; // Cloudinary gives .path as secure_url
   }
 
+  // Generate numericId dynamically
   const latestProduct = await Product.findOne().sort({ numericId: -1 }).lean();
   const nextNumericId = latestProduct ? latestProduct.numericId + 1 : 1;
   req.body.numericId = nextNumericId;
@@ -85,10 +86,9 @@ exports.updateVendorProduct = asyncHandler(async (req, res, next) => {
   }
 
   // Handle image update if needed
-  if (req.file) {
-    req.body.image = `/uploads/${req.file.filename}`;
+  if (req.file && req.file.path) {
+    req.body.image = req.file.path;
   }
-
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,

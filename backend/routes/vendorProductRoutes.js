@@ -8,19 +8,20 @@ const {
 } = require("../controllers/vendorProductController");
 const { vendorAuth } = require("../middleware/authMiddleware");
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
 const router = express.Router();
 
-// Multer config
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename(req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
+// Cloudinary Multer config
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "products", // Cloudinary folder name
+    allowed_formats: ["jpg", "jpeg", "png"],
   },
 });
+
 const upload = multer({ storage });
 
 // Vendor protected routes

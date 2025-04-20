@@ -3,7 +3,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
-
+const mongoose = require("mongoose");
 // Register vendor
 exports.register = asyncHandler(async (req, res, next) => {
   const { name, email, password, companyName, businessType } = req.body;

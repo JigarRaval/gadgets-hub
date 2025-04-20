@@ -25,6 +25,8 @@ import VendorRegister from "../src/pages/vendor/VendorRegister";
 import VendorDashboard from "../src/pages/vendor/VendorDashboard";
 import VendorLogin from "../src/pages/vendor/VendorLogin";
 import ProductsTab from "./pages/vendor/ProductTab";
+import EditProduct from "./pages/vendor/EditProduct";
+import NavbarLoader from "./pages/NavbarLoader";
 // import VendorSidebar from "./pages/vendor/VendorSidebar";
 // import VendorNavItem from "./pages/vendor/VendorNavItem";
 // import VendorMainContent from "./pages/vendor/VendorMainContent";
@@ -32,8 +34,6 @@ import ProductsTab from "./pages/vendor/ProductTab";
 // import InfoField from "./pages/vendor/InfoField";
 // import StatsCard from "./pages/vendor/StatsCard";
 // import ProductsTab from "./pages/vendor/ProductsTab";
-
-
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -73,6 +73,15 @@ const AnimatedRoutes = () => {
             </PageWrapper>
           }
         />
+        <Route
+          path="/vendor/edit-product/:id"
+          element={
+            <PageWrapper>
+              <EditProduct />
+            </PageWrapper>
+          }
+        />
+
         <Route
           path="/products/:id"
           element={
@@ -135,11 +144,11 @@ const AnimatedRoutes = () => {
           path="/vendor/products"
           element={
             <PageWrapper>
-              <ProductsTab/>
+              <ProductsTab />
             </PageWrapper>
           }
         />
-          <Route path="/vendor/add-product" element={<AddProduct />} />
+        <Route path="/vendor/add-product" element={<AddProduct />} />
         <Route
           path="/wishlist"
           element={
@@ -158,15 +167,14 @@ const AnimatedRoutes = () => {
           }
         />
 
-
         {/* Protected Routes */}
         <Route
           path="/checkout"
           element={
             // <ProtectedRoute>
-              <PageWrapper>
-                <Checkout />
-              </PageWrapper>
+            <PageWrapper>
+              <Checkout />
+            </PageWrapper>
             // </ProtectedRoute>
           }
         />
@@ -192,7 +200,7 @@ const AnimatedRoutes = () => {
           path="/vendor/dashboard"
           element={
             // <ProtectedRoute>
-              <VendorDashboard />
+            <VendorDashboard />
             // </ProtectedRoute>
           }
         />
@@ -268,7 +276,6 @@ const AnimatedRoutes = () => {
             </ProtectedRoute>
           }
           /> */}
-
       </Routes>
     </AnimatePresence>
   );
@@ -291,7 +298,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Navbar />
+        <NavbarLoader />
         <AnimatedRoutes />
         <Footer />
       </Router>

@@ -103,6 +103,9 @@ exports.updateVendorProduct = asyncHandler(async (req, res, next) => {
 // @desc    Delete product for a vendor
 // @route   DELETE /api/vendor-products/:id
 // @access  Private
+// @desc    Delete product for a vendor
+// @route   DELETE /api/vendor-products/:id
+// @access  Private
 exports.deleteVendorProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
@@ -119,7 +122,7 @@ exports.deleteVendorProduct = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await product.remove();
+  await Product.deleteOne({ _id: req.params.id }); // ✅ Correct way!
 
   // Optional: Remove from Vendor products array
   await Vendor.findByIdAndUpdate(req.vendor.id, {
@@ -131,3 +134,4 @@ exports.deleteVendorProduct = asyncHandler(async (req, res, next) => {
     data: {},
   });
 });
+

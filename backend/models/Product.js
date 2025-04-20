@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const productSchema = new mongoose.Schema(
   {
     numericId: { type: Number, unique: true },
@@ -9,7 +8,13 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
     image: { type: String },
-    
+
+    // ✅ Important: Link Product to Vendor
+    vendor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vendor",
+      required: true,
+    },
   },
   { timestamps: true }
 );

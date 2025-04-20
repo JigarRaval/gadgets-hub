@@ -44,7 +44,7 @@ const VendorNavbar = ({ activeTab, setActiveTab }) => {
     try {
       await logoutVendor();
       toast.success("Logged out successfully");
-      navigate("/vendor/login");
+      navigate("/login");
     } catch (error) {
       toast.error(error.message || "Logout failed");
     }
@@ -73,7 +73,7 @@ const VendorNavbar = ({ activeTab, setActiveTab }) => {
                 <NavLink
                   active={activeTab === "dashboard"}
                   onClick={() => handleNavClick("dashboard")}
-                  to="/vendor"
+                  to="/vendor/dashboard"
                 >
                   <FiHome className="mr-2" /> Dashboard
                 </NavLink>

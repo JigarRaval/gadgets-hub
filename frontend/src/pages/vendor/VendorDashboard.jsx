@@ -23,7 +23,7 @@ const VendorDashboard = () => {
         setVendor(vendorData);
       } catch (error) {
         setError(error.message || "Please login to continue");
-        navigate("/vendor/login");
+        navigate("/login");
       } finally {
         setLoading(false);
       }
@@ -35,7 +35,7 @@ const VendorDashboard = () => {
   const handleLogout = async () => {
     try {
       await logoutVendor();
-      navigate("/vendor/login");
+      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
@@ -62,13 +62,6 @@ const VendorDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <VendorNavbar 
-        vendor={vendor} 
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        handleLogout={handleLogout}
-      />
-
       <div className="p-4 md:p-8 pt-20 md:pt-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

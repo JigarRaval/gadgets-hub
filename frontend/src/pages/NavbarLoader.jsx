@@ -14,7 +14,7 @@ const NavbarLoader = ({ activeTab, setActiveTab }) => {
     } else if (userInfo && !vendorToken) {
       setNavbarType("user");
     } else {
-      setNavbarType(null); // No one logged in
+      setNavbarType("user"); // No one logged in
     }
   }, []);
 
